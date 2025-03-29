@@ -24,12 +24,9 @@ def check_win(board, mark):
 
 def check_draw(board):
     """Checks if the game is a draw (board is full and no one has won)."""
-    # Note: This function assumes check_win has already been called for the last player
-    # in the main game loop. A draw occurs if the board is full AND there's no winner.
-    # The is_board_full check is sufficient here because the main loop handles the win check first.
-    from board import is_board_full # Local import to avoid circular dependency issues if needed later
+    from board import is_board_full
     return is_board_full(board)
 
-def switch_player(current_player):
-    """Switches the current player."""
-    return 'O' if current_player == 'X' else 'X'
+def switch_player(current_player, human_mark, ai_mark):
+    """Switches the current player between human and AI."""
+    return ai_mark if current_player == human_mark else human_mark

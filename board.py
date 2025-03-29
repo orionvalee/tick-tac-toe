@@ -10,7 +10,7 @@ def initialize_board():
 
 def display_board(board):
     """Displays the current state of the board in a visually appealing format."""
-    print("\n     TIC TAC TOE")
+    print("\n     TIC TAC TOE (Human vs AI)")
     print("-------------------")
     print(f"|  {board[0]}  |  {board[1]}  |  {board[2]}  |")
     print("-------------------")
@@ -32,15 +32,25 @@ def display_board(board):
 def is_cell_empty(board, position):
     """Checks if the cell at the given position (1-9) is empty."""
     # Adjust position to be 0-indexed for list access
-    return board[position - 1] == ' '
+    # Ensure position is within bounds before checking the board index
+    if 1 <= position <= 9:
+        return board[position - 1] == ' '
+    return False # Position out of bounds is considered not empty for placement logic
 
 def place_mark(board, position, mark):
     """Places the player's mark ('X' or 'O') on the board at the given position."""
     # Adjust position to be 0-indexed
+    # Combine bounds check and empty check
     if 1 <= position <= 9 and is_cell_empty(board, position):
         board[position - 1] = mark
         return True
     return False # Indicate failure if position is invalid or taken
+
+# --- Function that was missing ---
+def get_empty_cells(board):
+    """Returns a list of indices (0-8) of empty cells."""
+    return [i for i, cell in enumerate(board) if cell == ' ']
+# ----------------------------------
 
 def is_board_full(board):
     """Checks if the board has any empty cells left."""
