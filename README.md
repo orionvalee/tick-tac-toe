@@ -1,55 +1,55 @@
-# Terminal Tic Tac Toe (Human vs AI)
+# Graphical Tic Tac Toe (Human vs AI) using Pygame
 
-A simple, text-based Tic Tac Toe game implemented in Python, designed to run in the terminal. This version features a Human player against a rule-based AI opponent. The project demonstrates modular programming principles by separating concerns into different files.
+A graphical Tic Tac Toe game implemented in Python using the Pygame library. This version features a Human player ('X') against a rule-based AI opponent ('O'). The project maintains a modular structure.
 
 ## Features
 
-*   Classic Tic Tac Toe gameplay: Human ('X') vs. AI ('O').
-*   **Rule-Based AI Opponent:** The AI attempts to:
-    1.  Win if possible.
-    2.  Block the human player from winning.
-    3.  Take the center square.
-    4.  Take a corner square.
-    5.  Take a side square.
-*   Clear, formatted terminal display.
-*   Input validation for the human player's moves.
-*   Win and Draw detection.
-*   Option to play again after a game ends.
-*   "Smart" look with screen clearing, formatted output, and simulated AI thinking time.
+*   **Graphical Interface:** Uses Pygame for visual display and mouse input.
+*   **Human vs. AI Gameplay:** Play against a rule-based AI.
+*   **Clear Visuals:** Displays the grid, X's, O's, current turn, and game over status.
+*   **Win Highlighting:** The winning line (row, column, or diagonal) is highlighted upon victory.
+*   **Rule-Based AI Opponent:** The AI attempts to win, block, and make strategic moves (center, corners, sides).
+*   **Play Again:** Option to restart the game after it ends.
+*   **Modular Design:** Code is separated into modules for logic, board state, AI, and GUI drawing.
 
 ## Project Structure
 
-The project is organized into the following Python modules:
-
-*   `main.py`: The main entry point of the application. It controls the overall game flow (Human vs AI turns), handles playing again, and orchestrates calls to other modules.
-*   `board.py`: Manages the game board's state (creation, updating, checking empty cells) and is responsible for displaying the board in the terminal.
-*   `game_logic.py`: Contains the core rules of Tic Tac Toe, including functions to check for winning conditions, detect draws, and switch players.
-*   `player.py`: Handles user interaction for the human player and contains the logic for the AI opponent's move selection.
-*   `README.md`: This file, providing information about the project.
+*   `main_gui.py`: The main Pygame application loop. Handles initialization, events (mouse clicks, quit), game state management, and calls other modules.
+*   `board.py`: Manages the internal representation of the game board state (list of ' ', 'X', 'O').
+*   `game_logic.py`: Contains the core rules: checking for wins (and identifying the winning line), detecting draws, and switching players.
+*   `player.py`: Contains the logic for the AI opponent's move selection.
+*   `gui.py`: Contains all Pygame-specific drawing functions (grid, figures, text, buttons) and visual constants (colors, sizes, fonts).
+*   `README.md`: This file.
 
 ## Requirements
 
 *   Python 3.x
+*   Pygame library: Install using `pip install pygame`
 
 ## How to Run
 
 1.  **Ensure you have Python 3 installed.**
-2.  **Save the files:** Make sure all the `.py` files (`main.py`, `board.py`, `game_logic.py`, `player.py`) are in the same directory (e.g., a folder named `tic_tac_toe_ai`).
-3.  **Open your terminal or command prompt.**
-4.  **Navigate to the directory** where you saved the files using the `cd` command.
+2.  **Install Pygame:** Open your terminal or command prompt and run:
     ```bash
-    cd path/to/your/tic_tac_toe_ai_folder
+    pip install pygame
     ```
-5.  **Run the main script:**
+3.  **Save the files:** Make sure all the `.py` files (`main_gui.py`, `board.py`, `game_logic.py`, `player.py`, `gui.py`) are in the same directory (e.g., `tic_tac_toe_gui`).
+4.  **Open your terminal or command prompt.**
+5.  **Navigate to the directory** where you saved the files:
     ```bash
-    python main.py
+    cd path/to/your/tic_tac_toe_gui_folder
     ```
-6.  Follow the on-screen prompts to play the game! As the Human player ('X'), enter numbers 1-9 corresponding to the positions on the board when it's your turn. The AI ('O') will make its moves automatically.
+6.  **Run the main script:**
+    ```bash
+    python main_gui.py
+    ```
+7.  A Pygame window should open. Click on an empty square to make your move as Player 'X'. The AI ('O') will automatically take its turn. Click "Play Again?" after the game finishes to start a new round.
 
 ## Gameplay
 
-*   The Human player is 'X', the AI is 'O'. Player 'X' starts the first game.
-*   The Human player enters a number from 1 to 9 to place their mark ('X') on the corresponding empty cell.
-*   The AI ('O') automatically determines its move based on its strategy and places its mark.
-*   The first player to get three of their marks in a row (horizontally, vertically, or diagonally) wins.
-*   If all cells are filled and no player has won, the game is a draw.
+*   The Human player ('X') always starts.
+*   Click on an empty square on the grid during your turn.
+*   The AI ('O') will calculate and make its move after a short delay.
+*   The game ends when a player gets three marks in a row or the board is full (draw).
+*   The winning line is highlighted.
+*   Click the "Play Again?" button to restart.
