@@ -1,80 +1,65 @@
 # player.py
-
 """
-Handles getting valid input from the human player and determining the AI's move.
+Handles determining the AI's move. Human input is handled in main_gui.py.
 """
 import random
 import time
 
-from board import is_cell_empty, get_empty_cells # Need access to board state
-from game_logic import check_win # Need access to win checking for AI strategy
+# Need to import from the correct modules now
+from board import is_cell_empty, get_empty_cells
+from game_logic import check_win as check_win_logic # Rename to avoid clash if needed
 
-def get_player_move(board, player_mark):
-    """Prompts the human player for their move and validates the input."""
-    while True:
-        try:
-            move_input = input(f"Your turn ({player_mark}), enter your move (1-9): ")
-            position = int(move_input)
-
-            if not 1 <= position <= 9:
-                print("❗️ Invalid input: Position must be between 1 and 9.")
-            elif not is_cell_empty(board, position):
-                print("❗️ Invalid input: That cell is already taken!")
-            else:
-                return position # Valid move received
-
-        except ValueError:
-            print("❗️ Invalid input: Please enter a number (1-9).")
-        except Exception as e:
-            print(f"An unexpected error occurred: {e}")
-
+# --- AI Logic (same as before) ---
 def get_ai_move(board, ai_mark, human_mark):
     """Determines the AI's next move using a rule-based strategy."""
-    print(f"AI ({ai_mark}) is thinking...", end='', flush=True)
-    time.sleep(random.uniform(0.5, 1.2)) # Simulate thinking time
-    print(" done.")
+    print(f"AI ({ai_mark}) is thinking...") # Keep console log for debugging
+    # No sleep here, makes GUI feel sluggish. Add delay in main loop if desired.
 
     empty_cells_indices = get_empty_cells(board) # Get 0-based indices
 
-    # --- AI Strategy ---
-
-    # 1. Check if AI can win in the next move
+    # 1. Check if AI can win
     for index in empty_cells_indices:
-        temp_board = board[:] # Create a copy
+        temp_board = board[:]
         temp_board[index] = ai_mark
-        if check_win(temp_board, ai_mark):
+        if check_win_logic(temp_board, ai_mark): # Use the imported check_win
+            print(f"AI chooses winning move: {index + 1}")
             return index + 1 # Return 1-based position
 
-    # 2. Check if Human can win in the next move, and block them
+    # 2. Check if Human can win and block
     for index in empty_cells_indices:
-        temp_board = board[:] # Create a copy
+        temp_board = board[:]
         temp_board[index] = human_mark
-        if check_win(temp_board, human_mark):
-            return index + 1 # Return 1-based position
+        if check_win_logic(temp_board, human_mark):
+             print(f"AI blocks human at: {index + 1}")
+             return index + 1
 
-    # 3. Try to take the center (position 5, index 4)
+    # 3. Try center
     center_index = 4
     if center_index in empty_cells_indices:
+        print("AI takes center")
         return center_index + 1
 
-    # 4. Try to take a corner (positions 1, 3, 7, 9 -- indices 0, 2, 6, 8)
+    # 4. Try corners
     corner_indices = [0, 2, 6, 8]
     available_corners = [i for i in corner_indices if i in empty_cells_indices]
     if available_corners:
-        return random.choice(available_corners) + 1 # Choose a random available corner
+        move = random.choice(available_corners)
+        print(f"AI takes corner: {move + 1}")
+        return move + 1
 
-    # 5. Try to take a side (positions 2, 4, 6, 8 -- indices 1, 3, 5, 7)
+    # 5. Try sides
     side_indices = [1, 3, 5, 7]
     available_sides = [i for i in side_indices if i in empty_cells_indices]
     if available_sides:
-        return random.choice(available_sides) + 1 # Choose a random available side
+        move = random.choice(available_sides)
+        print(f"AI takes side: {move + 1}")
+        return move + 1
 
-    # 6. Fallback (shouldn't technically be needed if logic above is sound, but safe)
-    # This case would only happen if somehow the board is full but no win/draw detected yet,
-    # or if get_empty_cells returned empty when it shouldn't.
+    # Fallback (shouldn't happen in standard play)
     if empty_cells_indices:
-         return random.choice(empty_cells_indices) + 1
+        move = random.choice(empty_cells_indices)
+        print(f"AI takes random available: {move + 1}")
+        return move + 1
     else:
-         # This state should ideally not be reached in a valid game sequence
-         print("Error: AI couldn't find a valid move.")
-         return None # Indicate an error or unexpected state
+        print("Error: AI couldn't find a valid move.")
+        return None
